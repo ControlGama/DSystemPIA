@@ -25,25 +25,25 @@ public class DSystemPIA {
     public static void main(String[] args) throws SigarException, InterruptedException, IOException {
 
         //Seleccionamos un Servidor por default
-        boolean isServer = false;
+        boolean isServer = true;
+        String ipServer = "25.12.245.237";
         
         while (true) {
 
-            ArrayList<InfomModel> lista = new ArrayList<>();
-            long latency = 0;
-            boolean Conection = true;
+//            ArrayList<InfomModel> lista = new ArrayList<>();
+//            long latency = 0;
+//            boolean Conection = true;
 
             //Obtener información de la PC
             InfoControl IC = new InfoControl();
-
-            String[] datosCliente = IC.getData(latency, Conection);
+            String[] datosCliente = IC.getData(ipServer);
 //            lista.add());
 
-            if (isServer) {
+            if (isServer) { 
                 StartServer ss = new StartServer(isServer,datosCliente);
-                ss.Start();
+                ipServer = ss.Start(ipServer);
             }else{
-                StartClient sc = new StartClient(datosCliente);
+                StartClient sc = new StartClient(ipServer, datosCliente);
                 isServer = sc.Start();
             }
             

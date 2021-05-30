@@ -17,13 +17,13 @@ public class StartServer {
     ArrayList<InfomModel> lista = new ArrayList<>();
     String[] MisDatos = new String[13];
     
-    public StartServer(boolean isServer, String[] datosCliente) {
+    public StartServer(boolean isServer,String[] datosCliente) {
         this.isServer = isServer;
         this.MisDatos = datosCliente; 
     }
 
-    public void Start() throws IOException, SigarException {
-
+    public String Start(String ipServer) throws IOException, SigarException {
+        
         ObjectInputStream ois = null;
         ObjectOutputStream oos = null;
 
@@ -57,11 +57,13 @@ public class StartServer {
                 //Revisar si un cliente tiene mejorScore que el mio
                 boolean flag = CheckScore(datosCliente[12]);
                 
-                if (isServer){
+                if (flag){
                     isServer = false; //Paso a ser cliente
+                    ipServer = s.getInetAddress().toString();
                 }
                 
                 oos.writeObject(flag);
+                oos.writeObject(ipServer);
                 System.out.println("Datos Recibidos...");
                 
                 
@@ -83,6 +85,8 @@ public class StartServer {
                 System.out.println("Conexion cerrada!");
             }
         }
+        
+        return ipServer;
     }
 
     private boolean CheckScore(String ScoreCliente) {

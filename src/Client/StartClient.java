@@ -20,19 +20,18 @@ import org.hyperic.sigar.Sigar;
 public class StartClient {
     
     String[] datosCliente = new String[13];
+    String ipServer;
     
     
-    public StartClient(String[] datosCliente){
-        this.datosCliente = datosCliente;         
+    public StartClient(String ipServer, String[] datosCliente){
+        this.datosCliente = datosCliente;
+        this.ipServer = ipServer;
     }
     
     public boolean Start() throws IOException{
         
         boolean flag = false;
-        
-        //Inicio de ejecución 
-        long Inicioexec = System.currentTimeMillis();
-                
+                        
         //Transferir información 
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
@@ -40,7 +39,7 @@ public class StartClient {
 
         try {
             // instancio el server con la IP y el PORT
-            s = new Socket("127.0.0.1", 5432);
+            s = new Socket(ipServer, 5432);
             oos = new ObjectOutputStream(s.getOutputStream());
             ois = new ObjectInputStream(s.getInputStream());
 
@@ -49,7 +48,10 @@ public class StartClient {
             
             // Soy el nuevo Server?
             flag = (boolean) ois.readObject();
-
+            
+            // Cual es la ip del server?
+            ipServer = (String) ois.readObject();
+            
             // muestro la respuesta que envio el server
             System.out.println(flag);
             
@@ -67,10 +69,6 @@ public class StartClient {
             }
         }
 
-        //Obtenemos y guardamos tiempo de ejecución
-        long Totalexec = System.currentTimeMillis() - Inicioexec;
-        System.out.println("Tiempo ejecución:" + Totalexec);
-        
         return flag;
     
     }

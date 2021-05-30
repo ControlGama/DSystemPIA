@@ -6,6 +6,8 @@
 package Monitor;
 
 //import static dsystempia.DSystemPIA.lista;
+import java.io.IOException;
+import java.net.Socket;
 import javax.swing.ImageIcon;
 import org.hyperic.sigar.Cpu;
 import org.hyperic.sigar.CpuInfo;
@@ -20,7 +22,6 @@ import org.hyperic.sigar.SigarException;
 public class InfoControl {
 
 //    public String[] datosCliente;
-//    Long latency;
 //    Boolean conection;
 
     public InfoControl() {
@@ -28,7 +29,7 @@ public class InfoControl {
 //        this.conection = conection;
     }
 
-    public String[] getData(Long latency, Boolean conection) throws SigarException {
+    public String[] getData(String ipServer) throws SigarException, IOException {
 
         //Obtener Datos Estáticos  
         String[] datosCliente = new String[13];
@@ -59,7 +60,7 @@ public class InfoControl {
         int usoCPU_nucleos;
         usoCPU_nucleos = sigar.getCpuInfoList()[0].getTotalCores();
 
-        datosCliente[0] = conection.toString();
+        datosCliente[0] = "TRUE";//conection.toString();
 
         datosCliente[1] = Modelo;
         datosCliente[2] = Velocidad.toString();
@@ -80,6 +81,8 @@ public class InfoControl {
 
         Double usoCPU_p;
         usoCPU_p = sigar.getCpuPerc().getCombined() * 100;
+        
+        Long latency = getLatency(ipServer);
 
         datosCliente[7] = HHDFree.toString();
         datosCliente[8] = MemRamDisp.toString();
@@ -339,6 +342,30 @@ public class InfoControl {
 
     private boolean isBetween(Long value, Double ini, Double fin) {
         return ini <= value && value <= fin;
+    }
+
+    private Long getLatency(String ipServer) throws IOException {
+
+        Socket s = null;
+
+        //Inicio de ejecución 
+        long Inicioexec = System.currentTimeMillis();
+
+        try {
+            s = new Socket(ipServer, 5432);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (s != null) {
+                s.close();
+            }
+        }
+
+        //Obtenemos y guardamos tiempo de ejecución
+        long latency = System.currentTimeMillis() - Inicioexec;
+//        System.out.println("Tiempo ejecución:" + Totalexec);
+
+        return latency;
     }
 
 }
