@@ -1,6 +1,8 @@
 package Server;
 
+import Monitor.InfoControl;
 import Monitor.InfomModel;
+import Monitor.MonitorFrame;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,9 +14,12 @@ import org.hyperic.sigar.SigarException;
 public class StartServer {
     
     boolean isServer;
+    ArrayList<InfomModel> lista = new ArrayList<>();
+    String[] MisDatos = new String[13];
     
-    public StartServer(boolean isServer) {
+    public StartServer(boolean isServer, String[] datosCliente) {
         this.isServer = isServer;
+        this.MisDatos = datosCliente; 
     }
 
     public void Start() throws IOException, SigarException {
@@ -24,12 +29,19 @@ public class StartServer {
 
         Socket s = null;
         ServerSocket ss = new ServerSocket(5432);
-
+        
+        MonitorFrame nf = new MonitorFrame();
+        nf.setVisible(true);
+        
+        InfoControl IC = new InfoControl();
+        lista.add(IC.InfomModelData(MisDatos));
+        nf.ShowData(lista);
+        
         while (isServer) {
             try {
                 
-                ArrayList<InfomModel> lista = new ArrayList<>();
-                
+                String[] datosCliente = new String[13];
+
                 // el ServerSocket me da el Socket
                 s = ss.accept();
                 // informacion en la consola
@@ -40,10 +52,21 @@ public class StartServer {
                 oos = new ObjectOutputStream(s.getOutputStream());
                 
                 // leo el nombre que envia el cliente
-                lista = (ArrayList<InfomModel>) ois.readObject();
-
-                oos.writeObject("Listo..");
+                datosCliente = (String[]) ois.readObject();
+                
+                //Revisar si un cliente tiene mejorScore que el mio
+                boolean flag = CheckScore(datosCliente[12]);
+                
+                if (isServer){
+                    isServer = false; //Paso a ser cliente
+                }
+                
+                oos.writeObject(flag);
                 System.out.println("Datos Recibidos...");
+                
+                
+                lista.add(IC.InfomModelData(datosCliente));
+                nf.ShowData(lista);
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -60,6 +83,23 @@ public class StartServer {
                 System.out.println("Conexion cerrada!");
             }
         }
+    }
+
+    private boolean CheckScore(String ScoreCliente) {
+        boolean flag;
+        int MyScore, ClientScore;
+        
+        MyScore = Integer.parseInt(MisDatos[12]);
+        ClientScore = Integer.parseInt(ScoreCliente);
+        
+        if (ClientScore > MyScore ) {
+            flag = true;
+        }else{
+            flag = false;
+        }
+        
+        return flag;
+        
     }
 
 }

@@ -5,9 +5,12 @@
  */
 package dsystempia;
 
+import Client.StartClient;
 import Monitor.InfoControl;
 import Monitor.InfomModel;
 import Monitor.MonitorFrame;
+import Server.StartServer;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import org.hyperic.sigar.Sigar;
@@ -19,10 +22,10 @@ import org.hyperic.sigar.SigarException;
  */
 public class DSystemPIA {
 
-    public static void main(String[] args) throws SigarException, InterruptedException {
+    public static void main(String[] args) throws SigarException, InterruptedException, IOException {
 
-        MonitorFrame nf = new MonitorFrame();
-        nf.setVisible(true);
+        //Seleccionamos un Servidor por default
+        boolean isServer = false;
         
         while (true) {
 
@@ -31,13 +34,18 @@ public class DSystemPIA {
             boolean Conection = true;
 
             //Obtener información de la PC
-            InfoControl IC = new InfoControl(latency, Conection);
-            lista.add(IC.InfomModelData(IC.getData()));
+            InfoControl IC = new InfoControl();
 
-            //Seleccionamos un Servidor por default
-            boolean isServer = true;
+            String[] datosCliente = IC.getData(latency, Conection);
+//            lista.add());
 
-            nf.ShowData(lista);
+            if (isServer) {
+                StartServer ss = new StartServer(isServer,datosCliente);
+                ss.Start();
+            }else{
+                StartClient sc = new StartClient(datosCliente);
+                isServer = sc.Start();
+            }
             
             TimeUnit.SECONDS.sleep(10);
             

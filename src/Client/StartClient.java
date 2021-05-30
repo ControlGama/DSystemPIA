@@ -19,14 +19,16 @@ import org.hyperic.sigar.Sigar;
  */
 public class StartClient {
     
-    ArrayList<InfomModel> lista = new ArrayList<>();
+    String[] datosCliente = new String[13];
     
-    public StartClient(ArrayList<InfomModel> lista){
-        this.lista = lista; 
-                
+    
+    public StartClient(String[] datosCliente){
+        this.datosCliente = datosCliente;         
     }
     
-    public void Start() throws IOException{
+    public boolean Start() throws IOException{
+        
+        boolean flag = false;
         
         //Inicio de ejecución 
         long Inicioexec = System.currentTimeMillis();
@@ -43,13 +45,14 @@ public class StartClient {
             ois = new ObjectInputStream(s.getInputStream());
 
             //Enviar Datos
-            oos.writeObject(lista);
+            oos.writeObject(datosCliente);
             
-            // recibo la respuesta (el saludo personalizado)
-            String ret = (String) ois.readObject();
+            // Soy el nuevo Server?
+            flag = (boolean) ois.readObject();
 
             // muestro la respuesta que envio el server
-            System.out.println(ret);
+            System.out.println(flag);
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -67,6 +70,8 @@ public class StartClient {
         //Obtenemos y guardamos tiempo de ejecución
         long Totalexec = System.currentTimeMillis() - Inicioexec;
         System.out.println("Tiempo ejecución:" + Totalexec);
+        
+        return flag;
     
     }
     

@@ -19,16 +19,16 @@ import org.hyperic.sigar.SigarException;
  */
 public class InfoControl {
 
-    public String[] datosCliente;
-    Long latency;
-    Boolean conection;
+//    public String[] datosCliente;
+//    Long latency;
+//    Boolean conection;
 
-    public InfoControl(long latency, boolean conection) {
-        this.latency = latency;
-        this.conection = conection;
+    public InfoControl() {
+//        this.latency = latency;
+//        this.conection = conection;
     }
 
-    public String[] getData() throws SigarException {
+    public String[] getData(Long latency, Boolean conection) throws SigarException {
 
         //Obtener Datos Estáticos  
         String[] datosCliente = new String[13];
