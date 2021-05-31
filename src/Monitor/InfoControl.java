@@ -141,10 +141,19 @@ public class InfoControl {
             case "Ryzen 9 3900X 12-Core Processor":
                 score = 1000;
                 break;
+            case "Intel(R) Core(TM) i7-7600U CPU @ 2.80GHz":
+                score = 900;
+                break;
             case "Core(TM) i5-7200U CPU @ 2.50GHz":
                 score = 800;
                 break;
-            case "B":
+            case "Intel i5 4440":
+                score = 700;
+                break;
+            case "Intel core i3-7020U":
+                score = 600;
+                break;                
+            case "Ryzen 3200G":
                 score = 500;
                 break;
             default:
