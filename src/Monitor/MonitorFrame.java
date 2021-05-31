@@ -14,54 +14,52 @@ import javax.swing.JTable;
  * @author MambaNegraPC
  */
 public class MonitorFrame extends javax.swing.JFrame {
-
-//    ArrayList<InfomModel> lista = new ArrayList<InfomModel>();
-    
-//    public MonitorFrame(ArrayList<InfomModel> lista) {
+   
     public MonitorFrame() {
-//        this.lista = listata;
         initComponents();
-//        ShowData();
         
     }
-
     
     public void ShowData(ArrayList<InfomModel> lista) {
         
-        String data[][] = new String[lista.size()][13];
-        
+        String data[][] = new String[lista.size()][15];
+                
         for (int i = 0; i < lista.size(); i++) {
             
             //Conexión
-            data[i][0] = lista.get(i).Conection;
+            data[i][0] = lista.get(i).IP;
+            data[i][1] = lista.get(i).isServer;
+            data[i][2] = lista.get(i).Conection;
             
             //Obtener Datos Estáticos
-            data[i][1] = lista.get(i).Modeloprocesador;
-            data[i][2] = lista.get(i).Velocidadprocesador;
-            data[i][3] = lista.get(i).Generacionprocesador;
-            data[i][4] = lista.get(i).RAMTotal;
-            data[i][5] = lista.get(i).SistemaOperativo;
-            data[i][6] = lista.get(i).HHDTotal;
+            data[i][3] = lista.get(i).Modeloprocesador;
+            data[i][4] = lista.get(i).Velocidadprocesador;
+            data[i][5] = lista.get(i).Nucleos;
+            data[i][6] = lista.get(i).RAMTotal;
+            data[i][7] = lista.get(i).SistemaOperativo;
+            data[i][8] = lista.get(i).HHDTotal;
             
             //Obtener Datos Dinámicos
-            data[i][7] = lista.get(i).HHDLibre;
-            data[i][8] = lista.get(i).MemRamDisp;
-            data[i][9] = lista.get(i).MemRam_p;
-            data[i][10] = lista.get(i).usoCPU_p;
-            data[i][11] = lista.get(i).Latency;
-            data[i][12] = lista.get(i).Score;
+            data[i][9] = lista.get(i).HHDLibre;
+            data[i][10] = lista.get(i).MemRamDisp;
+            data[i][11] = lista.get(i).MemRam_p;
+            data[i][12] = lista.get(i).usoCPU_p;
+            data[i][13] = lista.get(i).Latency;
+            data[i][14] = lista.get(i).Rank;
             
         } 
         
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel(
                data,
                 new String[]{
+                    "Ip",
+                    "Modo",
                     "Conexión",
                     
                     "Modelo procesador",
                     "Velocidad del procesador",
-                    "Generación del procesador",
-                    " RAM Total",
+                    "Nucleos",
+                    "RAM Total",
                     "Sistema operativo",
                     "HHD Total",
                     
@@ -90,20 +88,20 @@ public class MonitorFrame extends javax.swing.JFrame {
 
         jTableDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Conexión", "Modelo Procesador", "Velocidad del procesador", "Generación del procesador", "RAM Total", "Sistema operativo", "HHD Total", "HHD Libre", "RAM Disponible", "RAM %", "CPU %", "Latencia", "Score"
+                "IP", "Modo", "Conexión", "Modelo Procesador", "Velocidad del procesador", "Nucleos", "RAM Total", "Sistema operativo", "HHD Total", "HHD Libre", "RAM Disponible", "RAM %", "CPU %", "Latencia", "Rank"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

@@ -29,24 +29,19 @@ public class InfoControl {
 //        this.conection = conection;
     }
 
-    public String[] getData(String ipServer) throws SigarException, IOException {
-
+    public String[] getData(String ipServer, String MyIp) throws SigarException, IOException {
+                
         //Obtener Datos Estáticos  
-        String[] datosCliente = new String[13];
+        String[] datosCliente = new String[15];
 
         Sigar sigar = new Sigar();
         String sSistemaOperativo = System.getProperty("os.name");
 
-//        String Modelo;
-//        Modelo = sigar.getCpuInfoList()[0].getVendor();
         String Modelo;
         Modelo = sigar.getCpuInfoList()[0].getModel();
 
         Integer Velocidad;
         Velocidad = sigar.getCpuInfoList()[0].getMhz();
-
-        String Generacion;
-        Generacion = sigar.getCpuInfoList()[0].getModel();
 
         Long MemRam;
         MemRam = sigar.getMem().getTotal();
@@ -57,17 +52,26 @@ public class InfoControl {
         Long HHDTotal;
         HHDTotal = sigar.getFileSystemUsage("C:").getTotal();
 
-        int usoCPU_nucleos;
+        Integer usoCPU_nucleos;
         usoCPU_nucleos = sigar.getCpuInfoList()[0].getTotalCores();
+            
+        String Modo;
+        if (ipServer.equals(MyIp)){
+            Modo = "Servidor";
+        }else{
+            Modo = "Cliente";
+        }
+        
+        datosCliente[0] = MyIp; // IP
+        datosCliente[1] = Modo; //isServer;
+        datosCliente[2] = "On"; //Conection();
 
-        datosCliente[0] = "TRUE";//conection.toString();
-
-        datosCliente[1] = Modelo;
-        datosCliente[2] = Velocidad.toString();
-        datosCliente[3] = Generacion;
-        datosCliente[4] = MemRam.toString();
-        datosCliente[5] = SO;
-        datosCliente[6] = HHDTotal.toString();
+        datosCliente[3] = Modelo;
+        datosCliente[4] = Velocidad.toString();
+        datosCliente[5] = usoCPU_nucleos.toString();
+        datosCliente[6] = MemRam.toString();
+        datosCliente[7] = SO;
+        datosCliente[8] = HHDTotal.toString();
 
         //Obtener Datos Dinámicos
         Long HHDFree;
@@ -84,13 +88,13 @@ public class InfoControl {
         
         Long latency = getLatency(ipServer);
 
-        datosCliente[7] = HHDFree.toString();
-        datosCliente[8] = MemRamDisp.toString();
-        datosCliente[9] = MemRam_p.toString();
-        datosCliente[10] = usoCPU_p.toString();
-        datosCliente[11] = latency.toString();
+        datosCliente[9] = HHDFree.toString();
+        datosCliente[10] = MemRamDisp.toString();
+        datosCliente[11] = MemRam_p.toString();
+        datosCliente[12] = usoCPU_p.toString();
+        datosCliente[13] = latency.toString();
 
-        datosCliente[12] = getScore(Modelo, usoCPU_nucleos, Velocidad, MemRam_p, usoCPU_p, latency).toString();
+        datosCliente[14] = getScore(Modelo, usoCPU_nucleos, Velocidad, MemRam_p, usoCPU_p, latency).toString();
 
         return datosCliente;
     }
@@ -98,23 +102,26 @@ public class InfoControl {
     public InfomModel InfomModelData(String[] datos) throws SigarException {
 
         InfomModel info = new InfomModel(
-                datos[0], //Conection
+                
+                datos[0], //IP
+                datos[1], //Flag Servidor
+                datos[2], //Estado de conexion
 
                 //Obtener Datos Estáticos 
-                datos[1], //Modelo
-                datos[2], //Velocidad
-                datos[3], //Generacion
-                datos[4], //MemRam
-                datos[5], //SO
-                datos[6], //HHDTotal
+                datos[3], //Modelo
+                datos[4], //Velocidad
+                datos[5], //Nucleos
+                datos[6], //MemRam
+                datos[7], //SO
+                datos[8], //HHDTotal
 
                 //Obtener Datos Dinámicos
-                datos[7], //HHDFree
-                datos[8], //MemRamDisp
-                datos[9], //MemRam %
-                datos[10], //cpu %
-                datos[11], //Latencia
-                datos[12] //Score
+                datos[9], //HHDFree
+                datos[10], //MemRamDisp
+                datos[11], //MemRam %
+                datos[12], //cpu %
+                datos[13], //Latencia
+                datos[14] //Rank
         );
 
         return info;
@@ -127,10 +134,10 @@ public class InfoControl {
         //Modelo Rank
         switch (Modelo) {
             case "Ryzen 9 3900X 12-Core Processor":
-                score = 500;
+                score = 1000;
                 break;
-            case "A":
-                score = 500;
+            case "Core(TM) i5-7200U CPU @ 2.50GHz":
+                score = 8000;
                 break;
             case "B":
                 score = 500;
@@ -260,75 +267,75 @@ public class InfoControl {
 
         //RAM Rank
         if (isBetween(MemRam_p, 0.0, 9.9)) {
-            score = score + 1000;
+            score = score + 2000;
         } else if (isBetween(MemRam_p, 10.0, 19.9)) {
-            score = score + 900;
+            score = score + 1800;
         } else if (isBetween(MemRam_p, 20.0, 29.9)) {
-            score = score + 800;
+            score = score + 1600;
         } else if (isBetween(MemRam_p, 30.0, 39.9)) {
-            score = score + 700;
+            score = score + 1400;
         } else if (isBetween(MemRam_p, 40.0, 49.9)) {
-            score = score + 600;
+            score = score + 1200;
         } else if (isBetween(MemRam_p, 50.0, 59.9)) {
-            score = score + 500;
+            score = score + 1000;
         } else if (isBetween(MemRam_p, 60.0, 69.9)) {
-            score = score + 400;
+            score = score + 800;
         } else if (isBetween(MemRam_p, 70.0, 79.9)) {
-            score = score + 300;
+            score = score + 600;
         } else if (isBetween(MemRam_p, 80.0, 89.9)) {
-            score = score + 200;
+            score = score + 400;
         } else if (isBetween(MemRam_p, 90.0, 100.0)) {
-            score = score + 100;
+            score = score + 200;
         }
 
         //CPU Rank
         if (isBetween(usoCPU_p, 0.0, 9.9)) {
-            score = score + 1000;
+            score = score + 2000;
         } else if (isBetween(usoCPU_p, 10.0, 19.9)) {
-            score = score + 900;
+            score = score + 1800;
         } else if (isBetween(usoCPU_p, 20.0, 29.9)) {
-            score = score + 800;
+            score = score + 1600;
         } else if (isBetween(usoCPU_p, 30.0, 39.9)) {
-            score = score + 700;
+            score = score + 1400;
         } else if (isBetween(usoCPU_p, 40.0, 49.9)) {
-            score = score + 600;
+            score = score + 1200;
         } else if (isBetween(usoCPU_p, 50.0, 59.9)) {
-            score = score + 500;
+            score = score + 1000;
         } else if (isBetween(usoCPU_p, 60.0, 69.9)) {
-            score = score + 400;
+            score = score + 800;
         } else if (isBetween(usoCPU_p, 70.0, 79.9)) {
-            score = score + 300;
+            score = score + 600;
         } else if (isBetween(usoCPU_p, 80.0, 89.9)) {
-            score = score + 200;
+            score = score + 400;
         } else if (isBetween(usoCPU_p, 90.0, 100.0)) {
-            score = score + 100;
+            score = score + 200;
         }
 
         //Latency Rank
         if (isBetween(latency, 0.00, 4.99)) {
-            score = score + 1000;
+            score = score + 2000;
         } else if (isBetween(latency, 5.0, 9.9)) {
-            score = score + 900;
+            score = score + 1800;
         } else if (isBetween(latency, 10.0, 14.9)) {
-            score = score + 800;
+            score = score + 1600;
         } else if (isBetween(latency, 15.0, 19.9)) {
-            score = score + 700;
+            score = score + 1400;
         } else if (isBetween(latency, 20.0, 24.9)) {
-            score = score + 600;
+            score = score + 1200;
         } else if (isBetween(latency, 25.0, 29.9)) {
-            score = score + 500;
+            score = score + 1000;
         } else if (isBetween(latency, 30.0, 34.9)) {
-            score = score + 400;
+            score = score + 800;
         } else if (isBetween(latency, 35.0, 39.9)) {
-            score = score + 300;
+            score = score + 600;
         } else if (isBetween(latency, 40.0, 44.9)) {
-            score = score + 200;
+            score = score + 400;
         } else if (isBetween(latency, 45.0, 50.9)) {
-            score = score + 100;
+            score = score + 200;
         } else if (latency >= 51) {
             score = score + 10;
         }
-
+        
         return score;
     }
 
@@ -364,7 +371,7 @@ public class InfoControl {
         //Obtenemos y guardamos tiempo de ejecución
         long latency = System.currentTimeMillis() - Inicioexec;
 //        System.out.println("Tiempo ejecución:" + Totalexec);
-
+    
         return latency;
     }
 

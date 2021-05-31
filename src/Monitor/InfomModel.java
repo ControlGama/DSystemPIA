@@ -12,13 +12,15 @@ import javax.swing.Icon;
  * @author MambaNegraPC
  */
 public class InfomModel {
-
+    
+    String IP;
+    String isServer;
     String Conection;
-
+    
     //Obtener Datos Estáticos 
     String Modeloprocesador;
     String Velocidadprocesador;
-    String Generacionprocesador;
+    String Nucleos;
     String RAMTotal;
     String SistemaOperativo;
     String HHDTotal;
@@ -29,13 +31,15 @@ public class InfomModel {
     String MemRam_p;
     String usoCPU_p;
     String Latency;
-    String Score;
+    String Rank;
 
     public InfomModel(
+            String IP,
+            String isServer,
             String Conection,
             String Modeloprocesador,
             String Velocidadprocesador,
-            String Generacionprocesador,
+            String Nucleos,
             String RAMTotal,
             String SistemaOperativo,
             String HHDTotal,
@@ -44,15 +48,16 @@ public class InfomModel {
             String MemRam_p,
             String usoCPU_p,
             String Latency,
-            String Score
+            String Rank
     ) {
-        
+        this.IP = IP;
+        this.isServer = isServer;
         this.Conection = Conection;
         
         //Obtener Datos Estáticos
         this.Modeloprocesador = Modeloprocesador;
         this.Velocidadprocesador = Velocidadprocesador;
-        this.Generacionprocesador = Generacionprocesador;
+        this.Nucleos = Nucleos;
         this.RAMTotal = RAMTotal;
         this.SistemaOperativo = SistemaOperativo;
         this.HHDTotal = HHDTotal;
@@ -63,8 +68,32 @@ public class InfomModel {
         this.MemRam_p = MemRam_p;
         this.usoCPU_p = usoCPU_p;
         this.Latency = Latency;
-        this.Score = Score;
+        this.Rank = Rank;
 
+    }
+
+    public String getIP() {
+        return IP;
+    }
+
+    public void setIP(String IP) {
+        this.IP = IP;
+    }
+
+    public String getIsServer() {
+        return isServer;
+    }
+
+    public void setIsServer(String isServer) {
+        this.isServer = isServer;
+    }
+
+    public String getNucleos() {
+        return Nucleos;
+    }
+
+    public void setNucleos(String Nucleos) {
+        this.Nucleos = Nucleos;
     }
 
     public String getConection() {
@@ -76,11 +105,11 @@ public class InfomModel {
     }
 
     public String getScore() {
-        return Score;
+        return Rank;
     }
 
     public void setScore(String Score) {
-        this.Score = Score;
+        this.Rank = Score;
     }
 
     public String getMemRamDisp() {
@@ -129,14 +158,6 @@ public class InfomModel {
 
     public void setVelocidadprocesador(String Velocidadprocesador) {
         this.Velocidadprocesador = Velocidadprocesador;
-    }
-
-    public String getGeneracionprocesador() {
-        return Generacionprocesador;
-    }
-
-    public void setGeneracionprocesador(String Generacionprocesador) {
-        this.Generacionprocesador = Generacionprocesador;
     }
 
     public String getRAMTotal() {

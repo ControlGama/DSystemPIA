@@ -58,11 +58,13 @@
         <Component class="javax.swing.JTable" name="jTableDatos">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="13" rowCount="4">
+              <Table columnCount="15" rowCount="4">
+                <Column editable="false" title="IP" type="java.lang.String"/>
+                <Column editable="false" title="Modo" type="java.lang.String"/>
                 <Column editable="false" title="Conexi&#xf3;n" type="java.lang.String"/>
                 <Column editable="false" title="Modelo Procesador" type="java.lang.String"/>
                 <Column editable="false" title="Velocidad del procesador" type="java.lang.String"/>
-                <Column editable="false" title="Generaci&#xf3;n del procesador" type="java.lang.String"/>
+                <Column editable="false" title="Nucleos" type="java.lang.String"/>
                 <Column editable="false" title="RAM Total" type="java.lang.String"/>
                 <Column editable="false" title="Sistema operativo" type="java.lang.String"/>
                 <Column editable="false" title="HHD Total" type="java.lang.String"/>
@@ -71,11 +73,21 @@
                 <Column editable="false" title="RAM %" type="java.lang.String"/>
                 <Column editable="false" title="CPU %" type="java.lang.String"/>
                 <Column editable="false" title="Latencia" type="java.lang.String"/>
-                <Column editable="false" title="Score" type="java.lang.String"/>
+                <Column editable="false" title="Rank" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
