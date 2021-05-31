@@ -24,7 +24,7 @@ public class StartClient {
         this.ipServer = ipServer;
     }
     
-    public boolean Start(String MyIp) throws IOException, SigarException{
+    public boolean Start(String MyIp, boolean comando) throws IOException, SigarException{
         
         boolean flag = false;
         
@@ -44,6 +44,9 @@ public class StartClient {
             s = new Socket(ipServer, 5432);
             oos = new ObjectOutputStream(s.getOutputStream());
             ois = new ObjectInputStream(s.getInputStream());
+            
+            //Comandos para estresar el servidor
+            oos.writeObject(comando);
 
             //Enviar Datos
             oos.writeObject(datosCliente);

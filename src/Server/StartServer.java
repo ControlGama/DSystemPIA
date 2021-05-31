@@ -3,7 +3,9 @@ package Server;
 import Monitor.InfoControl;
 import Monitor.InfomModel;
 import Monitor.MonitorFrame;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -22,7 +24,7 @@ public class StartServer {
 //        this.MisDatos = datosCliente; 
     }
 
-    public String Start(String ipServer, String MyIp) throws IOException, SigarException {
+    public String Start(String ipServer, String MyIp) throws IOException, SigarException, InterruptedException {
 
         ObjectInputStream ois = null;
         ObjectOutputStream oos = null;
@@ -43,6 +45,8 @@ public class StartServer {
         Integer SecondBestScore = 0;
         String BackupIP = "";
 
+        boolean comandos;
+
         while (isServer) {
             try {
 
@@ -59,10 +63,16 @@ public class StartServer {
                 ois = new ObjectInputStream(s.getInputStream());
                 oos = new ObjectOutputStream(s.getOutputStream());
 
-                // leo el nombre que envia el cliente
+                // Ejecutar Comandos
+                comandos = (boolean) ois.readObject();
+                if (comandos) {
+                    setComandos();
+                }
+
+                // leo el nombre que envía el cliente
                 String[] datosCliente = (String[]) ois.readObject();
 
-                //Revisar si un cliente tiene mejorScore que el mio
+                //Revisar si un cliente tiene mejor Score que el mío
                 boolean flag = CheckScore(datosCliente[14]);
                 BackupIP = GetBackupIP(datosCliente[0], BackupIP, datosCliente[14], SecondBestScore);
 
@@ -77,6 +87,7 @@ public class StartServer {
                 oos.writeObject(BackupIP);
                 System.out.println("Datos Recibidos...");
 
+                addLista(lista, MisDatos);
                 addLista(lista, datosCliente);
 
                 //Revisar estado de conexion de los clientes
@@ -155,12 +166,12 @@ public class StartServer {
         boolean onOff;
 
         for (int i = 0; i < lista.size(); i++) {
-            
+
             InfomModel data = lista.get(i);
-            
+
             Long lastConection = Long.parseLong(data.getLastConection());
             long time = System.currentTimeMillis() - lastConection;
-            
+
             //Si en 30 Segundos no hay comunicación se marca como desconectado
             if (time >= 30000) {
                 data.setConection("Off");
@@ -168,6 +179,20 @@ public class StartServer {
                 data.setConection("On");
             }
 
+        }
+
+    }
+
+    private void setComandos() throws IOException, InterruptedException {
+
+        String cmd = "cmd /c start \"\" \"C:\\Users\\ControlGama\\Desktop\\CPU.lnk\"";
+        Runtime run = Runtime.getRuntime();
+        Process pr = run.exec(cmd);
+        pr.waitFor();
+        BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+        String line = "";
+        while ((line = buf.readLine()) != null) {
+            System.out.println(line);
         }
 
     }

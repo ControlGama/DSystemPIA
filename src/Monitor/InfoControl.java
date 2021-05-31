@@ -92,8 +92,6 @@ public class InfoControl {
         Double usoCPU_p;
         usoCPU_p = sigar.getCpuPerc().getCombined() * 100;
         
-        
-
         datosCliente[10] = HHDFree.toString();
         datosCliente[11] = MemRamDisp.toString();
         datosCliente[12] = MemRam_p.toString();
@@ -144,7 +142,7 @@ public class InfoControl {
                 score = 1000;
                 break;
             case "Core(TM) i5-7200U CPU @ 2.50GHz":
-                score = 8000;
+                score = 800;
                 break;
             case "B":
                 score = 500;
@@ -319,7 +317,7 @@ public class InfoControl {
         }
 
         //Latency Rank
-        if (isBetween(latency, 0.00, 4.99)) {
+        if (isBetween(latency, 0.01, 4.99)) {
             score = score + 2000;
         } else if (isBetween(latency, 5.0, 9.9)) {
             score = score + 1800;

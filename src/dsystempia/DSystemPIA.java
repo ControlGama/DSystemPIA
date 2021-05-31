@@ -15,6 +15,9 @@ public class DSystemPIA {
         String ipServer = "25.12.245.237";
         String MyIp = "25.12.245.237";
         
+        //Flag para encender instrucciones que estresan el servidor
+        boolean Command = true;
+        
         while (true) {
 
             if (isServer) { 
@@ -23,7 +26,7 @@ public class DSystemPIA {
                 isServer = false; //Si salió del método Start quiere decir que ya no es server
             }else{
                 StartClient sc = new StartClient(ipServer);
-                isServer = sc.Start(MyIp);
+                isServer = sc.Start(MyIp,Command);
             }
             
             TimeUnit.SECONDS.sleep(10);
