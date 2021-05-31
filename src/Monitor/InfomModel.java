@@ -16,6 +16,7 @@ public class InfomModel {
     String IP;
     String isServer;
     String Conection;
+    String LastConection;
     
     //Obtener Datos Estáticos 
     String Modeloprocesador;
@@ -32,11 +33,12 @@ public class InfomModel {
     String usoCPU_p;
     String Latency;
     String Rank;
-
+    
     public InfomModel(
             String IP,
             String isServer,
             String Conection,
+            String LastConection,
             String Modeloprocesador,
             String Velocidadprocesador,
             String Nucleos,
@@ -53,6 +55,7 @@ public class InfomModel {
         this.IP = IP;
         this.isServer = isServer;
         this.Conection = Conection;
+        this.LastConection = LastConection;
         
         //Obtener Datos Estáticos
         this.Modeloprocesador = Modeloprocesador;
@@ -70,6 +73,14 @@ public class InfomModel {
         this.Latency = Latency;
         this.Rank = Rank;
 
+    }
+
+    public String getLastConection() {
+        return LastConection;
+    }
+
+    public void setLastConection(String LastConection) {
+        this.LastConection = LastConection;
     }
 
     public String getIP() {
@@ -104,11 +115,11 @@ public class InfomModel {
         this.Conection = Conection;
     }
 
-    public String getScore() {
+    public String getRank() {
         return Rank;
     }
 
-    public void setScore(String Score) {
+    public void setRank(String Score) {
         this.Rank = Score;
     }
 

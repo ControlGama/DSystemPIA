@@ -32,7 +32,7 @@ public class InfoControl {
     public String[] getData(String ipServer, String MyIp) throws SigarException, IOException {
                 
         //Obtener Datos Estáticos  
-        String[] datosCliente = new String[15];
+        String[] datosCliente = new String[16];
 
         Sigar sigar = new Sigar();
         String sSistemaOperativo = System.getProperty("os.name");
@@ -54,24 +54,30 @@ public class InfoControl {
 
         Integer usoCPU_nucleos;
         usoCPU_nucleos = sigar.getCpuInfoList()[0].getTotalCores();
-            
+        
+        Long latency = 0L;
         String Modo;
         if (ipServer.equals(MyIp)){
             Modo = "Servidor";
         }else{
             Modo = "Cliente";
+            latency = getLatency(ipServer);
         }
+        
+        Long lastConection = System.currentTimeMillis();
         
         datosCliente[0] = MyIp; // IP
         datosCliente[1] = Modo; //isServer;
         datosCliente[2] = "On"; //Conection();
-
-        datosCliente[3] = Modelo;
-        datosCliente[4] = Velocidad.toString();
-        datosCliente[5] = usoCPU_nucleos.toString();
-        datosCliente[6] = MemRam.toString();
-        datosCliente[7] = SO;
-        datosCliente[8] = HHDTotal.toString();
+        
+        datosCliente[3] = lastConection.toString(); //Last Conection();
+        
+        datosCliente[4] = Modelo;
+        datosCliente[5] = Velocidad.toString();
+        datosCliente[6] = usoCPU_nucleos.toString();
+        datosCliente[7] = MemRam.toString();
+        datosCliente[8] = SO;
+        datosCliente[9] = HHDTotal.toString();
 
         //Obtener Datos Dinámicos
         Long HHDFree;
@@ -86,15 +92,15 @@ public class InfoControl {
         Double usoCPU_p;
         usoCPU_p = sigar.getCpuPerc().getCombined() * 100;
         
-        Long latency = getLatency(ipServer);
+        
 
-        datosCliente[9] = HHDFree.toString();
-        datosCliente[10] = MemRamDisp.toString();
-        datosCliente[11] = MemRam_p.toString();
-        datosCliente[12] = usoCPU_p.toString();
-        datosCliente[13] = latency.toString();
+        datosCliente[10] = HHDFree.toString();
+        datosCliente[11] = MemRamDisp.toString();
+        datosCliente[12] = MemRam_p.toString();
+        datosCliente[13] = usoCPU_p.toString();
+        datosCliente[14] = latency.toString();
 
-        datosCliente[14] = getScore(Modelo, usoCPU_nucleos, Velocidad, MemRam_p, usoCPU_p, latency).toString();
+        datosCliente[15] = getScore(Modelo, usoCPU_nucleos, Velocidad, MemRam_p, usoCPU_p, latency).toString();
 
         return datosCliente;
     }
@@ -106,22 +112,23 @@ public class InfoControl {
                 datos[0], //IP
                 datos[1], //Flag Servidor
                 datos[2], //Estado de conexion
-
+                datos[3], //Ultima Conexion
+                
                 //Obtener Datos Estáticos 
-                datos[3], //Modelo
-                datos[4], //Velocidad
-                datos[5], //Nucleos
-                datos[6], //MemRam
-                datos[7], //SO
-                datos[8], //HHDTotal
+                datos[4], //Modelo
+                datos[5], //Velocidad
+                datos[6], //Nucleos
+                datos[7], //MemRam
+                datos[8], //SO
+                datos[9], //HHDTotal
 
                 //Obtener Datos Dinámicos
-                datos[9], //HHDFree
-                datos[10], //MemRamDisp
-                datos[11], //MemRam %
-                datos[12], //cpu %
-                datos[13], //Latencia
-                datos[14] //Rank
+                datos[10], //HHDFree
+                datos[11], //MemRamDisp
+                datos[12], //MemRam %
+                datos[13], //cpu %
+                datos[14], //Latencia
+                datos[15] //Rank
         );
 
         return info;

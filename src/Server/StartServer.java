@@ -15,7 +15,7 @@ public class StartServer {
 
     boolean isServer;
     ArrayList<InfomModel> lista = new ArrayList<>();
-    String[] MisDatos = new String[15];
+    String[] MisDatos = new String[16];
 
     public StartServer(boolean isServer) {
         this.isServer = isServer;
@@ -28,7 +28,7 @@ public class StartServer {
         ObjectOutputStream oos = null;
 
         Socket s = null;
-        ServerSocket ss = new ServerSocket(5431);
+        ServerSocket ss = new ServerSocket(5432);
 
         InfoControl IC = new InfoControl();
         MisDatos = IC.getData(ipServer, MyIp);
@@ -108,7 +108,7 @@ public class StartServer {
         boolean flag;
         int MyScore, ClientScore;
 
-        MyScore = Integer.parseInt(MisDatos[12]);
+        MyScore = Integer.parseInt(MisDatos[15]);
         ClientScore = Integer.parseInt(ScoreCliente);
 
         if (ClientScore > MyScore) {
@@ -155,39 +155,21 @@ public class StartServer {
         boolean onOff;
 
         for (int i = 0; i < lista.size(); i++) {
+            
             InfomModel data = lista.get(i);
-
-            onOff = CheckConection(data.getIP());
-
-            if (onOff) {
-                data.setConection("On");
-            } else {
+            
+            Long lastConection = Long.parseLong(data.getLastConection());
+            long time = System.currentTimeMillis() - lastConection;
+            
+            //Si en 30 Segundos no hay comunicación se marca como desconectado
+            if (time >= 30000) {
                 data.setConection("Off");
+            } else {
+                data.setConection("On");
             }
 
         }
 
-    }
-
-    private boolean CheckConection(String ipServer) throws IOException {
-
-        boolean onOff = false;
-        Socket PinSocket = null;
-
-        try {
-            PinSocket = new Socket(ipServer, 5432);
-            onOff = true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            onOff = false;
-
-        } finally {
-            if (PinSocket != null) {
-                PinSocket.close();
-            }
-        }
-
-        return onOff;
     }
 
 }
